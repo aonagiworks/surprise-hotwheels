@@ -3,471 +3,706 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#1A0505" />
-  <title>Ka-chow! 🏎️</title>
+  <meta name="theme-color" content="#FFD100" />
+  <title>Hot Wheels Surprise 🏎️</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bebas+Neue&family=Outfit:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
+      --yellow: #FFD100;
+      --yellow-hot: #FFE566;
       --red: #E10600;
       --red-dark: #8B0000;
       --orange: #FF6A00;
-      --yellow: #FFD100;
-      --black: #0D0D0D;
-      --charcoal: #1A0A0A;
-      --panel: #160808;
-      --text: #FFF5E6;
-      --muted: #C4A484;
-      --check: #1A0A0A;
+      --black: #0A0A0A;
+      --ink: #111;
+      --panel: #111111;
+      --white: #FFFFFF;
+      --muted: #555;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: Inter, system-ui, sans-serif;
+      background: var(--yellow);
+      color: var(--ink);
       min-height: 100vh;
       overflow-x: hidden;
-      background: var(--black);
-      color: var(--text);
     }
+    button { font: inherit; border: 0; cursor: pointer; background: none; }
+    img { max-width: 100%; display: block; }
 
-    /* Checkerboard racing bg */
-    .race-bg {
-      background-color: #1A0505;
-      background-image:
-        linear-gradient(45deg, #0D0D0D 25%, transparent 25%),
-        linear-gradient(-45deg, #0D0D0D 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #0D0D0D 75%),
-        linear-gradient(-45deg, transparent 75%, #0D0D0D 75%);
-      background-size: 28px 28px;
-      background-position: 0 0, 0 14px, 14px -14px, -14px 0;
-    }
-
-    /* ─── PIN SCREEN ─── */
-    #pwScreen {
-      position: fixed; inset: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: center;
-      background:
-        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(225,6,0,.25), transparent 55%),
-        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(255,209,0,.08), transparent 50%),
-        #0D0D0D;
-      transition: opacity .55s ease, transform .55s ease;
-    }
-    #pwScreen.hidden {
-      opacity: 0; transform: scale(1.06); pointer-events: none;
-    }
-    .pw-box {
-      width: min(calc(100vw - 2rem), 360px);
-      background: linear-gradient(180deg, #1F0A0A, #120606);
-      border: 3px solid var(--red);
-      border-radius: 20px;
-      padding: 1.6rem 1.3rem 1.4rem;
-      text-align: center;
-      box-shadow:
-        0 0 0 2px #3A0000,
-        0 20px 60px rgba(0,0,0,.65),
-        0 0 40px rgba(225,6,0,.2);
-      position: relative;
-      overflow: hidden;
-    }
-    .pw-box::before {
-      content: "";
-      position: absolute; left: 0; right: 0; top: 0; height: 6px;
-      background: repeating-linear-gradient(
-        90deg,
-        #111 0 12px,
-        #FFD100 12px 24px
-      );
-    }
-    .pw-box .lock {
-      font-size: 2.4rem; margin: .4rem 0 .35rem;
-      filter: drop-shadow(0 4px 12px rgba(255,106,0,.4));
-    }
-    .pw-box h2 {
-      font-family: "Bebas Neue", Impact, sans-serif;
-      font-size: 1.85rem; letter-spacing: .06em;
-      color: var(--yellow);
-      text-shadow: 0 2px 0 #8B0000, 0 0 20px rgba(255,209,0,.25);
-      margin-bottom: .2rem;
-    }
-    .pw-box p { color: var(--muted); font-size: .82rem; margin-bottom: .9rem; }
-    .pw-display {
-      width: 100%; padding: .75rem; font-size: 1.55rem; font-weight: 800;
-      text-align: center; letter-spacing: .45em;
-      background: #0A0404; border: 2px solid #5A1010;
-      border-radius: 12px; color: var(--yellow); margin-bottom: .75rem;
-      font-family: "Outfit", sans-serif;
-    }
-    .pw-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem;
-    }
-    .pw-grid button {
-      padding: .85rem; font-size: 1.25rem; font-weight: 800;
-      border: 2px solid #4A1212; border-radius: 12px;
-      background: linear-gradient(180deg, #2A0C0C, #160606);
-      color: #fff; cursor: pointer; transition: .12s ease;
-      font-family: "Outfit", sans-serif;
-    }
-    .pw-grid button:hover {
-      border-color: var(--orange);
-      background: linear-gradient(180deg, #3A1010, #1A0808);
-    }
-    .pw-grid button:active { transform: scale(.94); }
-    .pw-grid .del {
-      border-color: #6A2020; color: #FF8A8A;
-    }
-    .pw-grid .ok {
-      background: linear-gradient(135deg, var(--red), var(--orange));
-      border: 0; color: #fff;
-    }
-    .pw-error {
-      color: #FF6B6B; font-size: .8rem; min-height: 1.2rem; margin-top: .5rem;
-      font-weight: 600;
-    }
-    .hint {
-      font-size: .72rem; color: rgba(255,209,0,.45); margin-top: .55rem;
-    }
-
-    /* ─── MAIN ─── */
-    #mainSite { display: none; }
-    #mainSite.show { display: block; }
-
-    .hero {
+    /* Yellow checker stage (like the promo collage bg) */
+    .stage {
       min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 1.25rem 1rem 2rem;
-      position: relative; overflow: hidden;
-    }
-    .hero-glow {
-      position: absolute; inset: 0; pointer-events: none;
+      padding: 1rem 1rem 2.5rem;
       background:
-        radial-gradient(ellipse 70% 45% at 50% 15%, rgba(225,6,0,.35), transparent 55%),
-        radial-gradient(ellipse 50% 35% at 80% 70%, rgba(255,209,0,.1), transparent 50%),
-        radial-gradient(ellipse 40% 30% at 15% 80%, rgba(255,106,0,.12), transparent 45%);
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.35), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(225,6,0,.12), transparent 35%),
+        var(--yellow);
+      position: relative;
     }
-
-    /* floating cars */
-    .cars {
-      position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;
-    }
-    .car {
-      position: absolute; font-size: 1.6rem; opacity: .18;
-      animation: race 9s linear infinite;
-      filter: drop-shadow(0 0 8px rgba(225,6,0,.4));
-    }
-    .car:nth-child(1) { top: 12%; left: -10%; animation-duration: 7s; font-size: 2rem; }
-    .car:nth-child(2) { top: 28%; left: -15%; animation-duration: 11s; animation-delay: -2s; }
-    .car:nth-child(3) { top: 55%; left: -12%; animation-duration: 8.5s; animation-delay: -4s; font-size: 1.4rem; }
-    .car:nth-child(4) { top: 72%; left: -18%; animation-duration: 10s; animation-delay: -1s; }
-    .car:nth-child(5) { top: 40%; left: -8%; animation-duration: 12s; animation-delay: -6s; opacity: .12; }
-    @keyframes race {
-      from { transform: translateX(0) rotate(-2deg); }
-      to { transform: translateX(120vw) rotate(2deg); }
-    }
-
-    .hero-card {
-      position: relative; z-index: 2;
-      width: min(calc(100vw - 1.5rem), 480px);
-      background: linear-gradient(165deg, #1C0808 0%, #0F0404 100%);
-      border: 3px solid var(--red);
-      border-radius: 24px;
-      padding: 1.6rem 1.35rem 1.5rem;
-      text-align: center;
-      box-shadow:
-        0 0 0 2px #3A0000,
-        0 28px 80px rgba(0,0,0,.55),
-        0 0 50px rgba(225,6,0,.18);
-      overflow: hidden;
-    }
-    .hero-card::before {
+    .stage::before {
       content: "";
-      position: absolute; left: 0; right: 0; top: 0; height: 8px;
-      background: repeating-linear-gradient(90deg, #111 0 14px, #FFD100 14px 28px);
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .08;
+      background-image:
+        linear-gradient(45deg, #000 25%, transparent 25%),
+        linear-gradient(-45deg, #000 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #000 75%),
+        linear-gradient(-45deg, transparent 75%, #000 75%);
+      background-size: 22px 22px;
+      background-position: 0 0, 0 11px, 11px -11px, -11px 0;
     }
-    .car-hero {
-      font-size: 4rem; line-height: 1;
-      margin: .5rem 0 .35rem;
-      filter: drop-shadow(0 8px 24px rgba(225,6,0,.45));
-      animation: bounce 2.2s ease-in-out infinite;
+
+    /* ════════════ PIN ════════════ */
+    #pwScreen {
+      position: fixed; inset: 0; z-index: 200;
+      display: grid; place-items: center;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,209,0,.2), transparent 50%),
+        #0A0A0A;
+      transition: opacity .5s ease, transform .5s ease;
+      padding: 1rem;
     }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+    #pwScreen.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
+    .pw-card {
+      width: min(100%, 380px);
+      background: #111;
+      border: 4px solid #000;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 8px 8px 0 #000, 0 0 0 3px var(--yellow);
+      position: relative; z-index: 1;
     }
-    .hero-card h1 {
+    .pw-stripe {
+      height: 18px;
+      background: repeating-linear-gradient(90deg, #000 0 16px, #fff 16px 32px);
+    }
+    .pw-body { padding: 1.4rem 1.2rem 1.3rem; text-align: center; color: #fff; }
+    .pw-body .logo {
       font-family: "Bebas Neue", Impact, sans-serif;
-      font-size: clamp(2rem, 8vw, 2.8rem);
-      letter-spacing: .04em; line-height: 1;
-      background: linear-gradient(180deg, #FFE566, #FFD100 40%, #FF6A00);
+      font-size: 2.2rem; letter-spacing: .04em;
+      background: linear-gradient(180deg, #FFE566, #FFD100 45%, #FF6A00);
       -webkit-background-clip: text; background-clip: text; color: transparent;
-      text-shadow: none;
       filter: drop-shadow(0 2px 0 #8B0000);
-      margin-bottom: .15rem;
+      line-height: 1; margin-bottom: .15rem;
     }
-    .hero-card .name {
-      font-family: "Bebas Neue", Impact, sans-serif;
-      font-size: clamp(1.5rem, 6vw, 2.1rem);
-      color: var(--orange);
-      letter-spacing: .08em;
+    .pw-body .sub {
+      font-size: .78rem; color: #aaa; margin-bottom: .9rem; font-weight: 600;
+    }
+    .pw-display {
+      background: #000; border: 3px solid #333; border-radius: 12px;
+      padding: .75rem; font-family: Outfit, sans-serif; font-weight: 800;
+      font-size: 1.5rem; letter-spacing: .4em; color: var(--yellow);
       margin-bottom: .75rem;
     }
-    .hero-card .msg {
-      color: rgba(255,245,230,.78);
-      font-size: .92rem; line-height: 1.65;
-      margin-bottom: 1.1rem;
+    .pw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
+    .pw-grid button {
+      padding: .85rem; font-size: 1.2rem; font-weight: 800;
+      border-radius: 12px; border: 3px solid #000;
+      background: linear-gradient(180deg, #2A2A2A, #151515);
+      color: #fff; box-shadow: 2px 2px 0 #000;
+      font-family: Outfit, sans-serif;
     }
-    .hero-card .msg strong {
-      color: var(--yellow);
-    }
-    .flag {
-      display: inline-block; margin: 0 .15rem;
+    .pw-grid button:hover { background: linear-gradient(180deg, #E10600, #8B0000); }
+    .pw-grid button:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 #000; }
+    .pw-grid .del { color: #FF8A8A; }
+    .pw-error { min-height: 1.2rem; color: #FF6B6B; font-size: .8rem; font-weight: 700; margin-top: .5rem; }
+    .pw-hint { font-size: .72rem; color: #777; margin-top: .4rem; }
+
+    /* ════════════ MAIN ════════════ */
+    #main { display: none; position: relative; z-index: 1; }
+    #main.show { display: block; }
+
+    /* Collage-style slide stack */
+    .deck {
+      max-width: 980px; margin: 0 auto;
+      display: grid; gap: 1rem;
+      padding-bottom: 2rem;
     }
 
-    .btn-music {
-      display: inline-flex; align-items: center; gap: .4rem;
-      padding: .5rem .95rem; border-radius: 999px;
-      background: rgba(255,209,0,.08);
-      border: 1px solid rgba(255,209,0,.25);
-      color: var(--yellow); font-size: .78rem; font-weight: 700;
-      cursor: pointer; transition: .15s ease; margin-bottom: 1rem;
+    .slide {
+      border: 4px solid #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 8px 8px 0 rgba(0,0,0,.85);
+      position: relative;
+      animation: pop .45s cubic-bezier(.2,.9,.2,1) both;
     }
-    .btn-music:hover { background: rgba(255,209,0,.15); }
-
-    .gallery {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: .55rem;
-      margin-bottom: 1.15rem;
-    }
-    .gallery .pic {
-      aspect-ratio: 1.2; border-radius: 14px; overflow: hidden;
-      border: 2px solid #4A1212;
-      background: linear-gradient(145deg, #2A0C0C, #120505);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--muted); font-size: .72rem; text-align: center; padding: .4rem;
-      font-weight: 600;
-    }
-    .gallery .pic.hot {
-      background: linear-gradient(145deg, #E10600 0%, #8B0000 100%);
-      color: rgba(255,255,255,.85); border-color: #FF6A00;
-      opacity: .85;
+    .slide:nth-child(1) { animation-delay: .05s; }
+    .slide:nth-child(2) { animation-delay: .1s; }
+    .slide:nth-child(3) { animation-delay: .15s; }
+    .slide:nth-child(4) { animation-delay: .2s; }
+    .slide:nth-child(5) { animation-delay: .25s; }
+    .slide:nth-child(6) { animation-delay: .3s; }
+    .slide:nth-child(7) { animation-delay: .35s; }
+    .slide:nth-child(8) { animation-delay: .4s; }
+    @keyframes pop {
+      from { opacity: 0; transform: translateY(18px) rotate(-1deg) scale(.98); }
+      to { opacity: 1; transform: none; }
     }
 
-    .btn-gas {
-      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-      width: 100%; padding: .95rem 1.2rem; border-radius: 999px;
-      font-family: "Bebas Neue", Impact, sans-serif;
-      font-size: 1.35rem; letter-spacing: .08em;
-      background: linear-gradient(90deg, var(--red), var(--orange) 55%, var(--yellow));
-      color: #1A0505; border: 0; cursor: pointer;
-      box-shadow: 0 10px 32px rgba(225,6,0,.4);
-      transition: transform .15s ease, filter .15s ease;
+    /* Title slide — black + checkered left */
+    .slide-title {
+      display: grid; grid-template-columns: 48px 1fr;
+      min-height: 280px; background: #0A0A0A; color: #fff;
     }
-    .btn-gas:hover { filter: brightness(1.08); transform: translateY(-2px); }
-    .btn-gas:active { transform: scale(.97); }
-
-    /* Track section */
-    .track {
-      padding: 2.5rem 1rem 3rem;
+    .check-col {
+      background: repeating-linear-gradient(
+        0deg,
+        #000 0 18px,
+        #fff 18px 36px
+      );
+    }
+    .slide-title .inner {
+      padding: 1.6rem 1.4rem 1.5rem;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative;
       background:
-        linear-gradient(180deg, #0A0404 0%, #120606 40%, #0A0404 100%);
-      border-top: 4px solid transparent;
-      border-image: repeating-linear-gradient(90deg, #111 0 16px, #FFD100 16px 32px) 1;
+        radial-gradient(ellipse 70% 80% at 90% 40%, rgba(255,106,0,.25), transparent 55%),
+        #0A0A0A;
     }
-    .track h2 {
+    .hw-logo {
       font-family: "Bebas Neue", Impact, sans-serif;
-      font-size: clamp(1.5rem, 5vw, 2rem);
-      text-align: center; letter-spacing: .06em;
-      color: var(--yellow);
-      text-shadow: 0 2px 0 #5A0000;
+      font-size: clamp(2.4rem, 8vw, 4rem);
+      line-height: .9; letter-spacing: .02em;
+      background: linear-gradient(180deg, #FFE566 0%, #FFD100 35%, #FF6A00 70%, #E10600 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 3px 0 #5A0000) drop-shadow(0 0 20px rgba(255,106,0,.35));
       margin-bottom: .35rem;
     }
-    .track .sub {
-      text-align: center; color: var(--muted); font-size: .85rem;
-      margin-bottom: 1.4rem;
+    .tagline {
+      font-weight: 800; font-size: clamp(.95rem, 2.5vw, 1.15rem);
+      color: #fff; letter-spacing: -.01em;
     }
-    .timeline {
-      max-width: 480px; margin: 0 auto; display: grid; gap: .7rem;
+    .tagline span { color: var(--yellow); }
+    .car-big {
+      position: absolute; right: 4%; bottom: 8%;
+      font-size: clamp(3.5rem, 12vw, 5.5rem);
+      filter: drop-shadow(0 10px 20px rgba(225,6,0,.5));
+      animation: zoom 2.4s ease-in-out infinite;
+      transform: rotate(-8deg);
     }
-    .tl-item {
-      display: flex; gap: .75rem; align-items: flex-start;
-      background: linear-gradient(90deg, #1A0808, #120505);
-      border: 2px solid #4A1212;
-      border-left: 4px solid var(--red);
-      border-radius: 14px; padding: .85rem .9rem;
+    @keyframes zoom {
+      0%, 100% { transform: rotate(-8deg) translateX(0); }
+      50% { transform: rotate(-6deg) translateX(6px); }
     }
-    .tl-icon { font-size: 1.35rem; line-height: 1; }
-    .tl-item h4 {
-      font-family: "Outfit", sans-serif;
-      font-size: .9rem; color: #fff; margin-bottom: .15rem;
+    .flame {
+      position: absolute; right: 18%; bottom: 18%;
+      font-size: 1.8rem; opacity: .85;
+      animation: flicker .4s ease-in-out infinite alternate;
     }
-    .tl-item p { font-size: .78rem; color: var(--muted); }
-
-    .finish {
-      max-width: 480px; margin: 1.5rem auto 0;
-      text-align: center;
-      padding: 1.2rem;
-      border-radius: 16px;
-      border: 2px dashed rgba(255,209,0,.35);
-      background: rgba(255,209,0,.04);
-    }
-    .finish p {
-      font-size: .9rem; color: rgba(255,245,230,.8); line-height: 1.55;
-    }
-    .finish strong { color: var(--yellow); }
-
-    footer {
-      text-align: center; padding: 1.25rem 1rem;
-      background: #050202; color: rgba(255,255,255,.28);
-      font-size: .72rem;
-      border-top: 1px solid rgba(255,255,255,.05);
+    @keyframes flicker {
+      from { opacity: .5; transform: scale(.9); }
+      to { opacity: 1; transform: scale(1.1); }
     }
 
-    /* Confetti pieces reuse */
+    /* Contents — black + red car accent */
+    .slide-contents {
+      background: #0D0D0D; color: #fff;
+      display: grid; grid-template-columns: 1.2fr .8fr;
+      min-height: 260px;
+    }
+    .slide-contents .left { padding: 1.4rem 1.3rem; }
+    .slide-contents h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      color: var(--red); letter-spacing: .04em; line-height: 1;
+      margin-bottom: .8rem;
+      text-shadow: 2px 2px 0 #000;
+    }
+    .contents-list {
+      list-style: none; display: grid; gap: .35rem;
+      font-weight: 700; font-size: .88rem;
+    }
+    .contents-list li {
+      display: flex; gap: .55rem; align-items: baseline;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding-bottom: .3rem;
+    }
+    .contents-list .n {
+      color: var(--yellow); font-family: Outfit, sans-serif;
+      font-size: .75rem; min-width: 1.6rem;
+    }
+    .slide-contents .right {
+      background:
+        linear-gradient(135deg, transparent 30%, rgba(225,6,0,.4)),
+        #1A0505;
+      display: grid; place-items: center;
+      position: relative; overflow: hidden;
+    }
+    .slide-contents .right .car {
+      font-size: 4.5rem;
+      filter: drop-shadow(0 8px 16px rgba(255,106,0,.5));
+      transform: rotate(-12deg);
+    }
+    .slide-contents .right .tracks {
+      position: absolute; inset: 0; opacity: .25;
+      background: repeating-linear-gradient(
+        105deg,
+        transparent 0 12px,
+        rgba(255,255,255,.08) 12px 14px
+      );
+    }
+
+    /* About — bold red */
+    .slide-about {
+      background: linear-gradient(135deg, #E10600 0%, #B00000 50%, #8B0000 100%);
+      color: #fff; min-height: 200px;
+      padding: 1.5rem 1.4rem;
+      position: relative; overflow: hidden;
+    }
+    .slide-about::after {
+      content: "";
+      position: absolute; right: -20px; top: 20%;
+      width: 180px; height: 180px; border-radius: 50%;
+      border: 14px solid rgba(0,0,0,.35);
+      box-shadow: inset 0 0 0 8px rgba(0,0,0,.2);
+    }
+    .slide-about h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      letter-spacing: .03em; line-height: 1;
+      margin-bottom: .6rem;
+      position: relative; z-index: 1;
+    }
+    .slide-about p {
+      max-width: 34rem; font-size: .95rem; line-height: 1.55;
+      position: relative; z-index: 1; font-weight: 600;
+      text-shadow: 0 1px 0 rgba(0,0,0,.25);
+    }
+    .slide-about .car-jump {
+      position: absolute; right: 8%; bottom: 10%;
+      font-size: 3.2rem; z-index: 1;
+      transform: rotate(-18deg);
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,.4));
+    }
+
+    /* Products — orange */
+    .slide-products {
+      background: linear-gradient(160deg, #FF6A00, #E85D04 60%, #C44900);
+      color: #fff; padding: 1.4rem 1.3rem 1.5rem;
+      min-height: 210px; position: relative; overflow: hidden;
+    }
+    .slide-products h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      letter-spacing: .03em; margin-bottom: .75rem;
+    }
+    .prod-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: .6rem; position: relative; z-index: 1;
+    }
+    .prod {
+      background: rgba(0,0,0,.25); border: 2px solid rgba(0,0,0,.35);
+      border-radius: 12px; padding: .75rem .65rem; text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .prod .emoji { font-size: 1.8rem; margin-bottom: .25rem; }
+    .prod h3 { font-size: .85rem; font-weight: 800; margin-bottom: .15rem; }
+    .prod p { font-size: .72rem; opacity: .9; font-weight: 600; }
+
+    /* Details — yellow + checker frame */
+    .slide-details {
+      background: var(--yellow);
+      border-color: #000 !important;
+      padding: 0;
+      min-height: 200px;
+    }
+    .details-frame {
+      border: 10px solid transparent;
+      border-image: repeating-linear-gradient(90deg, #000 0 12px, #fff 12px 24px) 10;
+      padding: 1.3rem 1.2rem;
+      min-height: 180px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; position: relative;
+    }
+    .details-frame h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(1.7rem, 5vw, 2.5rem);
+      color: #000; letter-spacing: .02em; line-height: 1;
+      margin-bottom: .5rem;
+    }
+    .details-frame p {
+      font-weight: 700; color: #222; max-width: 28rem; font-size: .92rem;
+    }
+    .details-frame .car {
+      font-size: 3rem; margin-top: .5rem;
+      filter: drop-shadow(4px 4px 0 rgba(0,0,0,.3));
+    }
+
+    /* Why matters — black + car circle */
+    .slide-why {
+      background: #0A0A0A; color: #fff;
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 240px;
+    }
+    .slide-why .left { padding: 1.4rem 1.3rem; }
+    .slide-why h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      letter-spacing: .03em; margin-bottom: .55rem; line-height: 1.05;
+    }
+    .slide-why p { color: #bbb; font-size: .88rem; line-height: 1.55; font-weight: 500; }
+    .slide-why .right {
+      display: grid; place-items: center;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(225,6,0,.2), transparent 60%),
+        #111;
+      position: relative;
+    }
+    .wheel {
+      width: min(160px, 38vw); height: min(160px, 38vw);
+      border-radius: 50%;
+      border: 6px solid #333;
+      display: grid; place-items: center;
+      background:
+        conic-gradient(from 0deg, #E10600, #FFD100, #FF6A00, #2D6BFF, #22D38E, #E10600);
+      box-shadow: 0 0 0 4px #000, 0 12px 30px rgba(0,0,0,.5);
+      position: relative;
+    }
+    .wheel::after {
+      content: "🏎️";
+      position: absolute;
+      font-size: 2.2rem;
+      background: #0A0A0A;
+      width: 55%; height: 55%; border-radius: 50%;
+      display: grid; place-items: center;
+      box-shadow: inset 0 0 0 3px #333;
+    }
+
+    /* Audience — black + lightning */
+    .slide-audience {
+      background: #0D0D0D; color: #fff; padding: 1.4rem 1.3rem;
+      position: relative; overflow: hidden; min-height: 200px;
+    }
+    .slide-audience::before, .slide-audience::after {
+      content: "⚡"; position: absolute; font-size: 4rem; opacity: .12;
+    }
+    .slide-audience::before { top: 10%; right: 8%; transform: rotate(15deg); }
+    .slide-audience::after { bottom: 8%; left: 6%; transform: rotate(-20deg); }
+    .slide-audience h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      letter-spacing: .03em; margin-bottom: .9rem; position: relative; z-index: 1;
+    }
+    .aud-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
+      position: relative; z-index: 1;
+    }
+    .aud-box {
+      background: rgba(255,255,255,.04); border: 2px solid #333;
+      border-radius: 12px; padding: .9rem;
+    }
+    .aud-box h3 {
+      color: var(--yellow); font-size: .72rem; letter-spacing: .08em;
+      font-weight: 800; margin-bottom: .4rem;
+    }
+    .aud-box p { font-size: .84rem; color: #ccc; font-weight: 600; line-height: 1.45; }
+    .aud-box .car { font-size: 1.8rem; margin-top: .4rem; }
+
+    /* Thank you — red + checker */
+    .slide-thanks {
+      background: linear-gradient(160deg, #E10600, #9B0000);
+      color: #fff; text-align: center;
+      padding: 2rem 1.2rem 1.6rem;
+      position: relative; overflow: hidden; min-height: 220px;
+    }
+    .slide-thanks .checker-top {
+      position: absolute; left: 0; right: 0; top: 0; height: 14px;
+      background: repeating-linear-gradient(90deg, #000 0 14px, #fff 14px 28px);
+    }
+    .slide-thanks .checker-bot {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 14px;
+      background: repeating-linear-gradient(90deg, #fff 0 14px, #000 14px 28px);
+    }
+    .slide-thanks h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2.4rem, 9vw, 3.6rem);
+      letter-spacing: .06em; line-height: 1;
+      margin: .6rem 0 .5rem;
+      text-shadow: 3px 3px 0 #000;
+      position: relative; z-index: 1;
+    }
+    .slide-thanks p {
+      font-weight: 700; font-size: .95rem; max-width: 26rem;
+      margin: 0 auto 1rem; position: relative; z-index: 1;
+      text-shadow: 0 1px 0 rgba(0,0,0,.3);
+    }
+    .slide-thanks .cars-row {
+      display: flex; justify-content: center; gap: 1.5rem;
+      font-size: 2.4rem; position: relative; z-index: 1;
+    }
+    .btn-gas {
+      display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+      margin-top: .3rem; padding: .75rem 1.5rem; border-radius: 999px;
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: 1.25rem; letter-spacing: .08em;
+      background: linear-gradient(90deg, #FFD100, #FF6A00);
+      color: #000; border: 3px solid #000;
+      box-shadow: 4px 4px 0 #000;
+      position: relative; z-index: 1;
+    }
+    .btn-gas:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 #000; }
+    .btn-gas:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; }
+
+    /* Message slide */
+    .slide-msg {
+      background: #111; color: #fff;
+      padding: 1.5rem 1.3rem;
+      border-left: 8px solid var(--yellow);
+    }
+    .slide-msg h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: 1.8rem; color: var(--yellow);
+      letter-spacing: .04em; margin-bottom: .5rem;
+    }
+    .slide-msg p { color: #ccc; font-size: .95rem; line-height: 1.6; font-weight: 500; }
+    .slide-msg p strong { color: #fff; }
+
+    .music-bar {
+      max-width: 980px; margin: 0 auto 1rem;
+      display: flex; justify-content: flex-end;
+    }
+    .btn-music {
+      background: #000; color: var(--yellow);
+      border: 3px solid #000; border-radius: 999px;
+      padding: .45rem .9rem; font-weight: 800; font-size: .78rem;
+      box-shadow: 3px 3px 0 rgba(0,0,0,.3);
+    }
+
     .confetti {
-      position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden;
+      position: fixed; inset: 0; pointer-events: none; z-index: 150; overflow: hidden;
     }
-    .confetti-piece {
-      position: absolute; top: -16px;
+    .piece {
+      position: absolute; top: -12px;
       animation: fall linear forwards;
     }
     @keyframes fall {
       to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
 
-    @media (max-width: 480px) {
-      .pw-box { padding: 1.3rem 1rem 1.15rem; }
-      .hero-card { padding: 1.35rem 1rem 1.25rem; }
-      .gallery { grid-template-columns: 1fr 1fr; }
-      .car-hero { font-size: 3.2rem; }
+    footer {
+      text-align: center; padding: 1rem;
+      font-size: .72rem; font-weight: 700; color: rgba(0,0,0,.45);
+    }
+
+    /* Responsive ladder */
+    @media (max-width: 900px) {
+      .slide-contents, .slide-why { grid-template-columns: 1fr; }
+      .slide-contents .right { min-height: 120px; }
+      .slide-why .right { min-height: 140px; padding: 1rem; }
+      .slide-title { grid-template-columns: 28px 1fr; }
+      .car-big { font-size: 3.2rem; right: 2%; }
+    }
+    @media (max-width: 640px) {
+      .stage { padding: .65rem .65rem 2rem; }
+      .prod-grid, .aud-grid { grid-template-columns: 1fr; }
+      .slide { box-shadow: 5px 5px 0 rgba(0,0,0,.8); border-width: 3px; }
+      .slide-about::after { display: none; }
+      .slide-about .car-jump { font-size: 2.4rem; }
+      .hw-logo { font-size: 2.2rem; }
+      .contents-list { font-size: .82rem; }
+    }
+    @media (max-width: 380px) {
+      .pw-body .logo { font-size: 1.7rem; }
+      .hw-logo { font-size: 1.85rem; }
+      .slide-thanks h2 { font-size: 2rem; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .car, .car-hero, .confetti-piece { animation: none !important; }
+      .slide, .car-big, .flame, .piece { animation: none !important; }
     }
   </style>
 </head>
 <body>
 
+<div class="confetti" id="confetti"></div>
+
 <!-- PIN -->
 <div id="pwScreen">
-  <div class="pw-box">
-    <div class="lock">🏎️</div>
-    <h2>START YOUR ENGINE</h2>
-    <p>Masukin PIN dulu biar gas pol!</p>
-    <div class="pw-display" id="pwDisplay">••••••</div>
-    <div class="pw-grid" id="pwGrid">
-      <button data-n="1">1</button>
-      <button data-n="2">2</button>
-      <button data-n="3">3</button>
-      <button data-n="4">4</button>
-      <button data-n="5">5</button>
-      <button data-n="6">6</button>
-      <button data-n="7">7</button>
-      <button data-n="8">8</button>
-      <button data-n="9">9</button>
-      <button data-n="" disabled style="opacity:0;pointer-events:none"></button>
-      <button data-n="0">0</button>
-      <button class="del" id="pwDel">⌫</button>
+  <div class="pw-card">
+    <div class="pw-stripe"></div>
+    <div class="pw-body">
+      <div class="logo">HOT WHEELS</div>
+      <div class="sub">🏎️ START YOUR ENGINE — masukin PIN dulu</div>
+      <div class="pw-display" id="pwDisplay">••••••</div>
+      <div class="pw-grid" id="pwGrid">
+        <button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button>
+        <button data-n="4">4</button><button data-n="5">5</button><button data-n="6">6</button>
+        <button data-n="7">7</button><button data-n="8">8</button><button data-n="9">9</button>
+        <button data-n="" disabled style="opacity:0;pointer-events:none"></button>
+        <button data-n="0">0</button>
+        <button class="del" id="pwDel">⌫</button>
+      </div>
+      <div class="pw-error" id="pwError"></div>
+      <p class="pw-hint">petunjuk : 6 digit spesial 🏁</p>
     </div>
-    <div class="pw-error" id="pwError"></div>
-    <p class="hint">petunjuk : 6 digit spesial 🏁</p>
+    <div class="pw-stripe"></div>
   </div>
 </div>
 
-<!-- MAIN -->
-<div id="mainSite">
-  <div class="confetti" id="confetti"></div>
-
-  <section class="hero race-bg">
-    <div class="hero-glow"></div>
-    <div class="cars" aria-hidden="true">
-      <span class="car">🏎️</span>
-      <span class="car">🚗</span>
-      <span class="car">🏎️</span>
-      <span class="car">🏁</span>
-      <span class="car">🚘</span>
+<!-- MAIN DECK -->
+<div id="main">
+  <div class="stage">
+    <div class="music-bar">
+      <button class="btn-music" id="musicBtn" type="button">🎵 Musik</button>
     </div>
 
-    <div class="hero-card">
-      <div class="car-hero">🏎️</div>
-      <h1>HAPPY BIRTHDAY</h1>
-      <div class="name" id="recipientName">SAYANG</div>
-      <div class="msg" id="mainMessage">
-        <p style="margin-bottom:.45rem"><strong>Ka-chow!</strong> 🏁</p>
-        <p>Satu hari buat merayakan umurmu, sejuta alasan buat bersyukur karena kenal kamu.</p>
-        <p style="margin-top:.5rem">Gas pol, ngegas terus ke depan — aku dukung full throttle. 🔥</p>
-      </div>
-
-      <button class="btn-music" id="musicBtn" type="button">🎵 Putar Musik</button>
-
-      <div class="gallery" id="photoGallery">
-        <div class="pic hot">🏁 Foto 1</div>
-        <div class="pic">📸 Foto 2</div>
-        <div class="pic">📸 Foto 3</div>
-        <div class="pic hot">🏎️ Foto 4</div>
-      </div>
-
-      <button class="btn-gas" id="surpriseBtn" type="button">GAS POL! 🎁</button>
-    </div>
-  </section>
-
-  <section class="track" id="memories">
-    <h2>PIT STOP MEMORIES</h2>
-    <p class="sub">Beberapa lap yang gak bakal dilupa</p>
-    <div class="timeline">
-      <div class="tl-item">
-        <span class="tl-icon">🚦</span>
-        <div>
-          <h4>Start Line</h4>
-          <p>Awal kita ketemu — engine nyala, hati ngegas.</p>
+    <div class="deck">
+      <!-- 01 Title -->
+      <section class="slide slide-title" id="home">
+        <div class="check-col" aria-hidden="true"></div>
+        <div class="inner">
+          <div class="hw-logo">HOT WHEELS</div>
+          <p class="tagline">Happy Birthday, <span id="recipientName">SAYANG</span>!</p>
+          <p style="margin-top:.45rem;font-size:.85rem;color:#aaa;font-weight:600">The Power of Speed &amp; Imagination 🔥</p>
+          <span class="flame" aria-hidden="true">🔥</span>
+          <span class="car-big" aria-hidden="true">🏎️</span>
         </div>
-      </div>
-      <div class="tl-item">
-        <span class="tl-icon">🏆</span>
-        <div>
-          <h4>Victory Lap</h4>
-          <p>Banyak momen seru yang bikin senyum sendiri.</p>
+      </section>
+
+      <!-- 02 Contents -->
+      <section class="slide slide-contents">
+        <div class="left">
+          <h2>CONTENTS</h2>
+          <ol class="contents-list">
+            <li><span class="n">01</span> INTRO</li>
+            <li><span class="n">02</span> AGENDA</li>
+            <li><span class="n">03</span> ABOUT YOU</li>
+            <li><span class="n">04</span> MESSAGE</li>
+            <li><span class="n">05</span> MEMORIES</li>
+            <li><span class="n">06</span> WHY YOU MATTER</li>
+            <li><span class="n">07</span> NEXT RACE</li>
+            <li><span class="n">08</span> BIG TAKEAWAY</li>
+            <li><span class="n">09</span> THANK YOU</li>
+          </ol>
         </div>
-      </div>
-      <div class="tl-item">
-        <span class="tl-icon">❤️</span>
-        <div>
-          <h4>Next Race</h4>
-          <p>Masih banyak track yang mau kita lewati bareng.</p>
+        <div class="right">
+          <div class="tracks"></div>
+          <span class="car">🚗💨</span>
         </div>
-      </div>
+      </section>
+
+      <!-- 03 About -->
+      <section class="slide slide-about">
+        <h2>About This Day</h2>
+        <p id="aboutText">
+          Hari ini track-nya buat kamu. Bukan cuma nambah umur — tapi nambah lap kemenangan,
+          nambah pit stop kenangan, dan nambah alasan buat gas pol bareng orang yang sayang kamu.
+        </p>
+        <span class="car-jump" aria-hidden="true">🏎️</span>
+      </section>
+
+      <!-- 04 Message -->
+      <section class="slide slide-msg">
+        <h2>MESSAGE FROM ME</h2>
+        <div id="mainMessage">
+          <p style="margin-bottom:.5rem"><strong>Ka-chow!</strong> 🏁</p>
+          <p>Satu hari buat merayakan umurmu, sejuta alasan buat bersyukur karena kenal kamu.</p>
+          <p style="margin-top:.45rem">Gas pol terus ke depan — tire grip kuat, engine nyala, dan aku di pit crew kamu. 🔥</p>
+        </div>
+      </section>
+
+      <!-- 05 Products style — memories as "products & play" -->
+      <section class="slide slide-products">
+        <h2>Memories &amp; Play</h2>
+        <div class="prod-grid">
+          <div class="prod">
+            <div class="emoji">🚦</div>
+            <h3>Start Line</h3>
+            <p>Awal kita ngegas bareng</p>
+          </div>
+          <div class="prod">
+            <div class="emoji">🏆</div>
+            <h3>Victory Lap</h3>
+            <p>Momen yang bikin senyum</p>
+          </div>
+          <div class="prod">
+            <div class="emoji">❤️</div>
+            <h3>Next Track</h3>
+            <p>Masih banyak race lagi</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 Details yellow -->
+      <section class="slide slide-details">
+        <div class="details-frame">
+          <h2>Racing Into the Details</h2>
+          <p>Semoga tahun ini full boost: sehat, bahagia, dan selalu punya alasan buat ngegas impianmu.</p>
+          <div class="car">🏎️</div>
+        </div>
+      </section>
+
+      <!-- 07 Why matters -->
+      <section class="slide slide-why">
+        <div class="left">
+          <h2>Why You Matter</h2>
+          <p>
+            Kayak koleksi Hot Wheels — tiap unit unik, tiap warna beda cerita.
+            Kamu juga: gak ada yang replace. Imagination-mu, speed-mu, caramu ngegas hidup — itu yang bikin track ini seru.
+          </p>
+        </div>
+        <div class="right">
+          <div class="wheel" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- 08 Audience -->
+      <section class="slide slide-audience">
+        <h2>Audience &amp; Positioning</h2>
+        <div class="aud-grid">
+          <div class="aud-box">
+            <h3>PRIMARY AUDIENCE</h3>
+            <p>Kamu — driver utama di track ini. Ulang tahunmu, spotlight-mu.</p>
+            <div class="car">🟢🏎️</div>
+          </div>
+          <div class="aud-box">
+            <h3>BRAND POSITIONING</h3>
+            <p>Speed · Imagination · Joy. Ngegas tanpa takut, tetap solid di tikungan.</p>
+            <div class="car">⚡</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 09 Thank you -->
+      <section class="slide slide-thanks" id="thanks">
+        <div class="checker-top"></div>
+        <h2>THANK YOU</h2>
+        <p>Makasih udah jadi bagian penting di race hidup aku. Happy birthday — full throttle! 🏁</p>
+        <div class="cars-row" aria-hidden="true">
+          <span>🚙</span>
+          <span>🏎️</span>
+        </div>
+        <button class="btn-gas" id="gasBtn" type="button">GAS POL! 🎁</button>
+        <div class="checker-bot"></div>
+      </section>
     </div>
 
-    <div class="finish">
-      <p>
-        <strong>Finish line sementara:</strong> semoga tahun ini full boost, tire grip kuat, dan pit crew (aku) selalu standby buat kamu. 🏁
-      </p>
-    </div>
-  </section>
-
-  <footer>
-    Made with 🔥 Hot Wheels energy · Aonagi Works · 2026
-  </footer>
+    <footer>Hot Wheels energy · Surprise deck · Aonagi Works · 2026</footer>
+  </div>
 </div>
 
 <script>
 (function () {
-  // ── CUSTOMIZE DI SINI ──────────────────────────────────
-  const PW = "130605";              // PIN 6 digit
-  const RECIPIENT = "SAYANG";       // nama di hero
+  // ── CUSTOMIZE ──────────────────────────────────────────
+  const PW = "130605";
+  const RECIPIENT = "SAYANG";
   // ───────────────────────────────────────────────────────
 
   let input = "";
-  const maxDigits = 6;
-
+  const max = 6;
   document.getElementById("recipientName").textContent = RECIPIENT;
 
   const pwScreen = document.getElementById("pwScreen");
-  const mainSite = document.getElementById("mainSite");
+  const main = document.getElementById("main");
   const pwDisplay = document.getElementById("pwDisplay");
   const pwError = document.getElementById("pwError");
 
-  function updateDisplay() {
+  function renderDots() {
     let s = "";
-    for (let i = 0; i < maxDigits; i++) s += i < input.length ? "●" : "•";
+    for (let i = 0; i < max; i++) s += i < input.length ? "●" : "•";
     pwDisplay.textContent = s;
     pwError.textContent = "";
   }
@@ -477,59 +712,56 @@
     if (!btn) return;
     if (btn.id === "pwDel") {
       input = input.slice(0, -1);
-      updateDisplay();
+      renderDots();
       return;
     }
     const n = btn.getAttribute("data-n");
-    if (n === null || n === "" || input.length >= maxDigits) return;
+    if (!n || input.length >= max) return;
     input += n;
-    updateDisplay();
-    if (input.length === maxDigits) {
+    renderDots();
+    if (input.length === max) {
       if (input === PW) {
         pwScreen.classList.add("hidden");
-        mainSite.classList.add("show");
-        launchConfetti();
+        main.classList.add("show");
+        confetti();
       } else {
         pwError.textContent = "❌ PIN salah — coba lagi, driver!";
-        setTimeout(() => {
-          input = "";
-          updateDisplay();
-        }, 650);
+        setTimeout(() => { input = ""; renderDots(); }, 650);
       }
     }
   });
 
-  function launchConfetti() {
+  function confetti() {
     const box = document.getElementById("confetti");
-    const colors = ["#E10600", "#FFD100", "#FF6A00", "#FFFFFF", "#FFD100", "#E10600", "#222"];
+    const colors = ["#E10600", "#FFD100", "#FF6A00", "#000", "#fff", "#2D6BFF", "#FFD100"];
     box.innerHTML = "";
-    for (let i = 0; i < 70; i++) {
+    for (let i = 0; i < 80; i++) {
       const el = document.createElement("div");
-      el.className = "confetti-piece";
+      el.className = "piece";
       el.style.left = Math.random() * 100 + "%";
       el.style.background = colors[i % colors.length];
-      el.style.width = 6 + Math.random() * 10 + "px";
-      el.style.height = 6 + Math.random() * 10 + "px";
-      el.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
-      el.style.animationDuration = 1.8 + Math.random() * 2.8 + "s";
-      el.style.animationDelay = Math.random() * 1.5 + "s";
+      el.style.width = 6 + Math.random() * 12 + "px";
+      el.style.height = 6 + Math.random() * 12 + "px";
+      el.style.borderRadius = Math.random() > 0.45 ? "50%" : "2px";
+      el.style.animationDuration = 1.6 + Math.random() * 2.6 + "s";
+      el.style.animationDelay = Math.random() * 1.2 + "s";
       box.appendChild(el);
     }
-    setTimeout(() => { box.innerHTML = ""; }, 5500);
+    setTimeout(() => { box.innerHTML = ""; }, 5000);
   }
 
-  document.getElementById("surpriseBtn").addEventListener("click", () => {
-    launchConfetti();
-    document.getElementById("memories").scrollIntoView({ behavior: "smooth" });
+  document.getElementById("gasBtn").addEventListener("click", () => {
+    confetti();
+    document.getElementById("home").scrollIntoView({ behavior: "smooth" });
   });
 
   let musicOn = false;
   document.getElementById("musicBtn").addEventListener("click", function () {
     musicOn = !musicOn;
-    this.textContent = musicOn ? "🎵 Musik Nyala ♪" : "🎵 Putar Musik";
+    this.textContent = musicOn ? "🎵 Musik ON" : "🎵 Musik";
   });
 
-  updateDisplay();
+  renderDots();
 })();
 </script>
 </body>
