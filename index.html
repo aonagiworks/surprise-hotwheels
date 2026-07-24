@@ -219,8 +219,62 @@
       filter: drop-shadow(0 6px 16px rgba(225,6,0,.4));
     }
     .hero-emoji svg { width: 100%; max-width: 300px; height: auto; display: block; margin: 0 auto; }
-    .car-svg { max-width: 320px; margin: 0 auto .25rem; }
-    .car-svg svg { width: 100%; height: auto; display: block; }
+    .car-svg {
+      max-width: 340px; margin: 0 auto .35rem;
+      position: relative;
+    }
+    .car-svg svg { width: 100%; height: auto; display: block; position: relative; z-index: 2; }
+    .car-wrap {
+      position: relative;
+      max-width: 360px;
+      margin: 0 auto .4rem;
+    }
+    .exhaust {
+      position: absolute; right: 2%; top: 48%;
+      width: 70px; height: 36px; z-index: 1; pointer-events: none;
+      transform: translateY(-50%);
+    }
+    .exhaust i {
+      position: absolute; right: 0; top: 50%;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: radial-gradient(circle, #FFD100 0%, #FF6A00 40%, transparent 70%);
+      opacity: 0;
+      animation: exhaust 0.7s ease-out infinite;
+    }
+    .exhaust i:nth-child(1) { animation-delay: 0s; top: 30%; }
+    .exhaust i:nth-child(2) { animation-delay: .15s; top: 50%; width: 18px; height: 18px; }
+    .exhaust i:nth-child(3) { animation-delay: .3s; top: 55%; width: 22px; height: 22px; }
+    .exhaust i:nth-child(4) { animation-delay: .45s; top: 40%; width: 16px; height: 16px; }
+    @keyframes exhaust {
+      0% { transform: translate(0, -50%) scale(.4); opacity: .95; }
+      100% { transform: translate(-55px, -50%) scale(1.6); opacity: 0; }
+    }
+    .car-bob {
+      animation: carBob 1.8s ease-in-out infinite;
+    }
+    @keyframes carBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .photo-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: .5rem; margin: .75rem 0 .4rem;
+    }
+    .photo-grid .ph {
+      aspect-ratio: 1;
+      border-radius: 12px; overflow: hidden;
+      border: 3px solid #333; background: #1A1A1A;
+      position: relative;
+    }
+    .photo-grid .ph img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .photo-grid .ph .placeholder {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      color: #666; font-size: .72rem; font-weight: 700; text-align: center; padding: .4rem;
+    }
+    .photo-grid .ph.has-img .placeholder { display: none; }
+    audio#bgMusic { display: none; }
 
     .mem-grid {
       display: grid; grid-template-columns: 1fr; gap: .5rem; margin-top: .75rem;
@@ -353,7 +407,8 @@
       <div class="card wide">
         <div class="stripe"></div>
         <div class="body" style="text-align:center">
-          <div class="car-svg" id="menuSvg"><?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320" fill="none">
+          <div class="car-wrap">
+            <div class="car-svg" id="menuSvg"><?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320" fill="none">
   <defs>
     <linearGradient id="body" x1="80" y1="40" x2="560" y2="260"><stop stop-color="#FF2A2A"/><stop offset=".35" stop-color="#E10600"/><stop offset=".7" stop-color="#B00000"/><stop offset="1" stop-color="#6A0000"/></linearGradient>
     <linearGradient id="shine" x1="160" y1="70" x2="420" y2="180"><stop stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
@@ -385,7 +440,9 @@
   <path d="M175 207L175 263 M147 235L203 235 M155 215L195 255 M195 215L155 255" stroke="#666" stroke-width="3"/>
   <path d="M300 125L318 118 322 128 305 135Z" fill="#222"/>
   <ellipse cx="320" cy="120" rx="8" ry="5" fill="#9FE8FF" opacity=".35"/>
-</svg></div>
+</svg>
+            <div class="exhaust car-bob"><i></i><i></i><i></i><i></i></div>
+          </div>
           <h1>HOT WHEELS</h1>
           <div class="name" id="recipientName">SAYANG</div>
           <p style="margin-bottom:.2rem">Pilih track yang mau dibuka — tiap tombol buka slide sendiri.</p>
@@ -454,9 +511,16 @@
             <p style="margin-bottom:.45rem"><strong>Satu hari buat merayakan umurmu</strong>, sejuta alasan buat bersyukur karena kenal kamu.</p>
             <p>Gas pol terus ke depan — tire grip kuat, engine nyala, dan aku di pit crew kamu. 🔥</p>
           </div>
+          <!-- foto placeholder -->
+          <div class="photo-grid" id="photoGrid">
+            <div class="ph" id="ph1"><div class="placeholder">📸 foto 1</div></div>
+            <div class="ph" id="ph2"><div class="placeholder">📸 foto 2</div></div>
+            <div class="ph" id="ph3"><div class="placeholder">📸 foto 3</div></div>
+            <div class="ph" id="ph4"><div class="placeholder">📸 foto 4</div></div>
+          </div>
+          <audio id="bgMusic" loop preload="none"></audio>
           <div class="btn-row">
             <button class="btn btn-black" type="button" data-screen="menu">← Menu</button>
-            <button class="btn btn-orange" type="button" id="btnType">✍️ Replay teks</button>
             <button class="btn btn-yellow" type="button" data-screen="memories">Next →</button>
           </div>
         </div>
@@ -710,8 +774,8 @@
     showScreen(id);
   });
 
-  // Message typewriter
-  $("btnType").addEventListener("click", () => {
+  // Typewriter auto on message screen
+  function autoType() {
     const box = $("mainMessage");
     const full =
       "Ka-chow! 🏁 Satu hari buat merayakan umurmu, sejuta alasan buat bersyukur karena kenal kamu. Gas pol terus ke depan — tire grip kuat, engine nyala, dan aku di pit crew kamu. 🔥";
@@ -722,10 +786,31 @@
       box.textContent = full.slice(0, ++i);
       if (i >= full.length) clearInterval(box._t);
     }, 16);
-    toast("✍️ Replay pesan");
-  });
+  }
 
-  // Wish list (local)
+  // Play typewriter every time message screen opens
+  const msgObserver = new MutationObserver(() => {
+    const msgScreen = $("message");
+    if (msgScreen && msgScreen.classList.contains("active")) {
+      autoType();
+    }
+  });
+  document.querySelectorAll(".screen").forEach((s) => msgObserver.observe(s, { attributes: true, attributeFilter: ["class"] }));
+
+  // Music
+  let audio = $("bgMusic");
+  $("btnMusic").addEventListener("click", function () {
+    musicOn = !musicOn;
+    this.textContent = musicOn ? "🎵 ON" : "🎵";
+    if (musicOn && audio.src) {
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+      toast("🎵 Musik diplay");
+    } else {
+      audio.pause();
+      toast(musicOn ? "🔇 Musik off" : "🎵 Musik - setel link lagu di HTML");
+    }
+  });
   function esc(s) {
     return String(s)
       .replace(/&/g, "&amp;")
@@ -824,11 +909,6 @@
   });
   $("btnConfetti").addEventListener("click", () => { confetti(); toast("🎉"); });
   $("btnConfettiTop").addEventListener("click", () => { confetti(); toast("🎉"); });
-  $("btnMusic").addEventListener("click", function () {
-    musicOn = !musicOn;
-    this.textContent = musicOn ? "🎵 ON" : "🎵";
-    toast(musicOn ? "Musik ON" : "Musik OFF");
-  });
 
   setInterval(() => { if (speed > 0) setSpeed(speed - 2); }, 800);
   renderPin();
