@@ -182,6 +182,24 @@
       100% { opacity: 1; transform: translateX(-50%) scale(1) translateY(0); }
     }
 
+    .overlay-btns {
+      position: absolute; bottom: 2%; left: 50%; transform: translateX(-50%);
+      z-index: 5;
+      display: flex; flex-wrap: wrap; gap: .5rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .4s ease .8s;
+    }
+    .overlay-btns.show { opacity: 1; pointer-events: auto; }
+    .overlay-btn {
+      background: #000; color: var(--yellow); border: 3px solid #000;
+      border-radius: 999px; padding: .55rem 1rem;
+      font-weight: 800; font-size: .85rem;
+      box-shadow: 4px 4px 0 rgba(0,0,0,.35);
+    }
+    .overlay-btn:hover {
+      background: var(--red); color: #fff; transform: translate(-1px,-1px);
+    }
+
     .racer {
       position: absolute; bottom: 18%; left: -40%;
       width: min(55vw, 280px); z-index: 3;
@@ -399,11 +417,15 @@
     <!-- Animated track -->
     <div class="track-scene" id="track">
       <div class="track-check"></div>
+      <div class="track-road"></div>
       <div class="hb-banner" id="hbBanner">
         HAPPY BIRTHDAY
         <span class="who" id="hbName">SAYANG</span>
       </div>
-      <div class="track-road"></div>
+      <div class="overlay-btns" id="overlayBtns">
+        <button class="overlay-btn" type="button" id="msgBtn">💌 Baca Ucapan</button>
+        <button class="overlay-btn" type="button" id="photoBtn">📸 Lihat Foto</button>
+      </div>
       <div class="racer" id="racer">
         <div class="exhaust"><i></i><i></i><i></i><i></i></div>
         <!-- red HW car SVG -->
@@ -541,7 +563,7 @@
   const PW = "130605";
   const RECIPIENT = "SAYANG";
   // MUSIC_URL: isi nanti, contoh 'assets/lagu.mp3' atau URL mp3
-  const MUSIC_URL = "";
+  const MUSIC_URL = "https://www.dropbox.com/scl/fi/tyourlink/beautiful-boy-john-lennon.mp3?dl=1"; // john lennon beautiful boy - ganti link bro, ini dummy
   // PHOTOS: isi array URL foto, max 4
   const PHOTOS = [];
   // ───────────────────────────────────────────────────────
@@ -633,8 +655,20 @@
         $("pwScreen").classList.add("hidden");
         $("world").classList.add("show");
         runCar();
-        typeMessage();
-        typedOnce = true;
+        // Music auto play
+        const audio = $("bgMusic");
+        if (audio.src) {
+          audio.play().catch(() => {});
+          musicOn = true;
+          $("btnMusic").classList.add("on");
+          $("btnMusic").textContent = "🎵 Music ON";
+        }
+        // Show overlay buttons
+        setTimeout(() => {
+          $("msgBtn").classList.add("show");
+          $("photoBtn").classList.add("show");
+          $("hbBanner").classList.add("show");
+        }, 1500);
         toast("🏁 Engine ON — halo " + RECIPIENT + "!");
       } else {
         $("pwError").textContent = "❌ PIN salah — coba lagi!";
@@ -666,6 +700,15 @@
   }
   $("btnMusic").addEventListener("click", toggleMusic);
   $("btnMusicBig").addEventListener("click", toggleMusic);
+
+  $("msgBtn").addEventListener("click", () => {
+    $("message").scrollIntoView({ behavior: "smooth" });
+    toast("💌 Ucapan di bawah");
+  });
+  $("photoBtn").addEventListener("click", () => {
+    $("message").scrollIntoView({ behavior: "smooth" });
+    toast("📸 Foto di bawah");
+  });
 
   $("btnRace").addEventListener("click", () => {
     runCar();
