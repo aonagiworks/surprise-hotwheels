@@ -472,6 +472,161 @@
       box-shadow: 3px 3px 0 rgba(0,0,0,.3);
     }
 
+    /* Interactive controls */
+    .race-nav {
+      max-width: 980px; margin: 0 auto .85rem;
+      display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center;
+    }
+    .race-nav button {
+      background: #000; color: #fff; border: 3px solid #000;
+      border-radius: 999px; padding: .4rem .75rem;
+      font-size: .72rem; font-weight: 800;
+      box-shadow: 3px 3px 0 rgba(0,0,0,.25);
+      transition: transform .12s ease, background .12s ease;
+    }
+    .race-nav button:hover { background: var(--red); transform: translateY(-2px); }
+    .race-nav button.active { background: var(--yellow); color: #000; }
+
+    .action-bar {
+      max-width: 980px; margin: 0 auto 1rem;
+      display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center;
+    }
+    .action-bar .act {
+      border: 3px solid #000; border-radius: 12px;
+      padding: .55rem .85rem; font-weight: 800; font-size: .8rem;
+      background: #fff; color: #000;
+      box-shadow: 3px 3px 0 #000;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .action-bar .act:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 #000; }
+    .action-bar .act:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #000; }
+    .action-bar .act.red { background: var(--red); color: #fff; }
+    .action-bar .act.orange { background: var(--orange); color: #fff; }
+    .action-bar .act.yellow { background: var(--yellow); }
+
+    .prod {
+      cursor: pointer; user-select: none;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .prod:hover { transform: translateY(-3px) scale(1.02); }
+    .prod.picked {
+      outline: 3px solid #000;
+      box-shadow: 0 0 0 3px var(--yellow), 4px 4px 0 #000;
+      transform: scale(1.04);
+    }
+    .prod .tap-hint {
+      display: block; margin-top: .35rem;
+      font-size: .65rem; opacity: .85; font-weight: 700;
+    }
+
+    .wish-box {
+      max-width: 980px; margin: .5rem auto 1rem;
+      background: #111; border: 4px solid #000; border-radius: 16px;
+      padding: 1rem; box-shadow: 6px 6px 0 #000; color: #fff;
+    }
+    .wish-box h3 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: 1.4rem; color: var(--yellow); letter-spacing: .04em;
+      margin-bottom: .5rem;
+    }
+    .wish-row { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .wish-row input {
+      flex: 1 1 180px; min-width: 0;
+      border: 3px solid #333; border-radius: 10px;
+      background: #0A0A0A; color: #fff; padding: .65rem .8rem;
+      font-weight: 600;
+    }
+    .wish-row input:focus { outline: 2px solid var(--yellow); border-color: var(--yellow); }
+    .wish-list {
+      margin-top: .65rem; display: grid; gap: .35rem;
+    }
+    .wish-item {
+      background: rgba(255,209,0,.08); border: 2px solid #333;
+      border-radius: 10px; padding: .5rem .7rem;
+      font-size: .85rem; font-weight: 600; color: #eee;
+      display: flex; justify-content: space-between; align-items: center; gap: .5rem;
+    }
+    .wish-item button {
+      color: #FF8A8A; font-weight: 800; font-size: .75rem;
+      padding: .2rem .45rem; border-radius: 6px;
+      border: 1px solid #442; background: rgba(0,0,0,.3);
+    }
+
+    .nitro-overlay {
+      position: fixed; inset: 0; z-index: 180; pointer-events: none;
+      opacity: 0; transition: opacity .2s ease;
+      background:
+        linear-gradient(90deg, transparent, rgba(255,209,0,.15), transparent),
+        radial-gradient(circle at 50% 50%, rgba(225,6,0,.25), transparent 60%);
+    }
+    .nitro-overlay.on { opacity: 1; animation: nitroFlash .9s ease; }
+    @keyframes nitroFlash {
+      0% { filter: brightness(1.4); }
+      100% { filter: brightness(1); }
+    }
+
+    .speedo {
+      position: fixed; right: 12px; bottom: 12px; z-index: 120;
+      background: #000; color: var(--yellow);
+      border: 3px solid #000; border-radius: 14px;
+      padding: .45rem .7rem; font-family: Outfit, sans-serif;
+      font-weight: 800; font-size: .78rem;
+      box-shadow: 4px 4px 0 rgba(0,0,0,.35);
+      display: none;
+    }
+    #main.show .speedo { display: block; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 70px; z-index: 190;
+      transform: translateX(-50%) translateY(20px);
+      background: #000; color: #fff; border: 3px solid var(--yellow);
+      border-radius: 999px; padding: .55rem 1rem;
+      font-weight: 800; font-size: .82rem;
+      opacity: 0; pointer-events: none;
+      transition: .25s ease; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+      max-width: min(90vw, 360px); text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .wheel {
+      cursor: pointer;
+      transition: transform .1s linear;
+    }
+    .wheel.spinning {
+      animation: spinWheel 1.2s cubic-bezier(.2,.8,.2,1) 1;
+    }
+    @keyframes spinWheel {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(720deg); }
+    }
+
+    .slide-thanks .extra-btns {
+      display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center;
+      margin-top: .7rem; position: relative; z-index: 1;
+    }
+    .slide-thanks .extra-btns button {
+      background: #000; color: #fff; border: 3px solid #000;
+      border-radius: 999px; padding: .45rem .85rem;
+      font-weight: 800; font-size: .75rem;
+      box-shadow: 3px 3px 0 rgba(0,0,0,.35);
+    }
+    .slide-thanks .extra-btns button:hover { background: #222; }
+
+    .contents-list li {
+      cursor: pointer; border-radius: 6px; padding: .25rem .2rem .3rem;
+      transition: background .12s ease, transform .12s ease;
+    }
+    .contents-list li:hover {
+      background: rgba(255,209,0,.1); transform: translateX(4px);
+    }
+
+    @media (max-width: 640px) {
+      .race-nav { gap: .3rem; }
+      .race-nav button { font-size: .65rem; padding: .35rem .55rem; }
+      .action-bar .act { flex: 1 1 40%; font-size: .72rem; }
+      .speedo { right: 8px; bottom: 8px; font-size: .7rem; }
+    }
+
     .confetti {
       position: fixed; inset: 0; pointer-events: none; z-index: 150; overflow: hidden;
     }
@@ -549,6 +704,26 @@
       <button class="btn-music" id="musicBtn" type="button">🎵 Musik</button>
     </div>
 
+    <nav class="race-nav" id="raceNav" aria-label="Navigasi slide">
+      <button type="button" data-go="home">01 Intro</button>
+      <button type="button" data-go="contents">02 Contents</button>
+      <button type="button" data-go="about">03 About</button>
+      <button type="button" data-go="message">04 Message</button>
+      <button type="button" data-go="memories">05 Memories</button>
+      <button type="button" data-go="details">06 Details</button>
+      <button type="button" data-go="why">07 Why</button>
+      <button type="button" data-go="audience">08 Audience</button>
+      <button type="button" data-go="thanks">09 Thanks</button>
+    </nav>
+
+    <div class="action-bar">
+      <button class="act red" type="button" id="btnNitro">🔥 NITRO</button>
+      <button class="act orange" type="button" id="btnHorn">📢 KLAKSON</button>
+      <button class="act yellow" type="button" id="btnBoost">⚡ BOOST SPEED</button>
+      <button class="act" type="button" id="btnShuffle">🎲 SHUFFLE CAR</button>
+      <button class="act red" type="button" id="btnConfetti">🎉 CONFETTI</button>
+    </div>
+
     <div class="deck">
       <!-- 01 Title -->
       <section class="slide slide-title" id="home">
@@ -557,100 +732,115 @@
           <div class="hw-logo">HOT WHEELS</div>
           <p class="tagline">Happy Birthday, <span id="recipientName">SAYANG</span>!</p>
           <p style="margin-top:.45rem;font-size:.85rem;color:#aaa;font-weight:600">The Power of Speed &amp; Imagination 🔥</p>
+          <div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:.45rem">
+            <button class="btn-gas" type="button" id="btnStartRace" style="width:auto;padding:.65rem 1.2rem;font-size:1.1rem">START RACE ▶</button>
+          </div>
           <span class="flame" aria-hidden="true">🔥</span>
-          <span class="car-big" aria-hidden="true">🏎️</span>
+          <span class="car-big" id="heroCar" aria-hidden="true">🏎️</span>
         </div>
       </section>
 
       <!-- 02 Contents -->
-      <section class="slide slide-contents">
+      <section class="slide slide-contents" id="contents">
         <div class="left">
           <h2>CONTENTS</h2>
-          <ol class="contents-list">
-            <li><span class="n">01</span> INTRO</li>
-            <li><span class="n">02</span> AGENDA</li>
-            <li><span class="n">03</span> ABOUT YOU</li>
-            <li><span class="n">04</span> MESSAGE</li>
-            <li><span class="n">05</span> MEMORIES</li>
-            <li><span class="n">06</span> WHY YOU MATTER</li>
-            <li><span class="n">07</span> NEXT RACE</li>
-            <li><span class="n">08</span> BIG TAKEAWAY</li>
-            <li><span class="n">09</span> THANK YOU</li>
+          <ol class="contents-list" id="contentsList">
+            <li data-go="home"><span class="n">01</span> INTRO</li>
+            <li data-go="contents"><span class="n">02</span> AGENDA</li>
+            <li data-go="about"><span class="n">03</span> ABOUT YOU</li>
+            <li data-go="message"><span class="n">04</span> MESSAGE</li>
+            <li data-go="memories"><span class="n">05</span> MEMORIES</li>
+            <li data-go="why"><span class="n">06</span> WHY YOU MATTER</li>
+            <li data-go="details"><span class="n">07</span> NEXT RACE</li>
+            <li data-go="audience"><span class="n">08</span> BIG TAKEAWAY</li>
+            <li data-go="thanks"><span class="n">09</span> THANK YOU</li>
           </ol>
         </div>
         <div class="right">
           <div class="tracks"></div>
-          <span class="car">🚗💨</span>
+          <span class="car" id="contentsCar">🚗💨</span>
         </div>
       </section>
 
       <!-- 03 About -->
-      <section class="slide slide-about">
+      <section class="slide slide-about" id="about">
         <h2>About This Day</h2>
         <p id="aboutText">
           Hari ini track-nya buat kamu. Bukan cuma nambah umur — tapi nambah lap kemenangan,
           nambah pit stop kenangan, dan nambah alasan buat gas pol bareng orang yang sayang kamu.
         </p>
+        <button type="button" id="btnFlipAbout" class="act" style="margin-top:.8rem;position:relative;z-index:2;background:#000;color:#fff;border:3px solid #000;border-radius:999px;padding:.45rem .9rem;font-weight:800;font-size:.78rem">
+          🔄 Flip pesan rahasia
+        </button>
         <span class="car-jump" aria-hidden="true">🏎️</span>
       </section>
 
       <!-- 04 Message -->
-      <section class="slide slide-msg">
+      <section class="slide slide-msg" id="message">
         <h2>MESSAGE FROM ME</h2>
         <div id="mainMessage">
           <p style="margin-bottom:.5rem"><strong>Ka-chow!</strong> 🏁</p>
           <p>Satu hari buat merayakan umurmu, sejuta alasan buat bersyukur karena kenal kamu.</p>
           <p style="margin-top:.45rem">Gas pol terus ke depan — tire grip kuat, engine nyala, dan aku di pit crew kamu. 🔥</p>
         </div>
+        <button type="button" id="btnTypeMsg" class="act yellow" style="margin-top:.8rem;border:3px solid #000;border-radius:10px;padding:.5rem .85rem;font-weight:800;font-size:.78rem;background:var(--yellow);box-shadow:3px 3px 0 #000">
+          ✍️ Putar ulang pesan
+        </button>
       </section>
 
-      <!-- 05 Products style — memories as "products & play" -->
-      <section class="slide slide-products">
+      <!-- 05 Memories -->
+      <section class="slide slide-products" id="memories">
         <h2>Memories &amp; Play</h2>
-        <div class="prod-grid">
-          <div class="prod">
+        <p style="font-size:.8rem;font-weight:700;margin:-.3rem 0 .7rem;opacity:.9">Tap kartu buat pilih momen favorit 👇</p>
+        <div class="prod-grid" id="memoryCards">
+          <div class="prod" data-mem="Start Line">
             <div class="emoji">🚦</div>
             <h3>Start Line</h3>
             <p>Awal kita ngegas bareng</p>
+            <span class="tap-hint">tap me</span>
           </div>
-          <div class="prod">
+          <div class="prod" data-mem="Victory Lap">
             <div class="emoji">🏆</div>
             <h3>Victory Lap</h3>
             <p>Momen yang bikin senyum</p>
+            <span class="tap-hint">tap me</span>
           </div>
-          <div class="prod">
+          <div class="prod" data-mem="Next Track">
             <div class="emoji">❤️</div>
             <h3>Next Track</h3>
             <p>Masih banyak race lagi</p>
+            <span class="tap-hint">tap me</span>
           </div>
         </div>
       </section>
 
-      <!-- 06 Details yellow -->
-      <section class="slide slide-details">
+      <!-- 06 Details -->
+      <section class="slide slide-details" id="details">
         <div class="details-frame">
           <h2>Racing Into the Details</h2>
-          <p>Semoga tahun ini full boost: sehat, bahagia, dan selalu punya alasan buat ngegas impianmu.</p>
-          <div class="car">🏎️</div>
+          <p id="detailsText">Semoga tahun ini full boost: sehat, bahagia, dan selalu punya alasan buat ngegas impianmu.</p>
+          <div class="car" id="detailsCar">🏎️</div>
+          <button type="button" id="btnRandomWish" class="btn-gas" style="width:auto;margin-top:.75rem;padding:.55rem 1.1rem;font-size:1rem">🎲 RANDOM WISH</button>
         </div>
       </section>
 
-      <!-- 07 Why matters -->
-      <section class="slide slide-why">
+      <!-- 07 Why -->
+      <section class="slide slide-why" id="why">
         <div class="left">
           <h2>Why You Matter</h2>
           <p>
             Kayak koleksi Hot Wheels — tiap unit unik, tiap warna beda cerita.
             Kamu juga: gak ada yang replace. Imagination-mu, speed-mu, caramu ngegas hidup — itu yang bikin track ini seru.
           </p>
+          <p style="margin-top:.6rem;font-size:.8rem;color:#888;font-weight:700">Tap roda di kanan buat spin! 🎡</p>
         </div>
         <div class="right">
-          <div class="wheel" aria-hidden="true"></div>
+          <div class="wheel" id="spinWheel" title="Tap to spin" aria-label="Spin wheel" role="button" tabindex="0"></div>
         </div>
       </section>
 
       <!-- 08 Audience -->
-      <section class="slide slide-audience">
+      <section class="slide slide-audience" id="audience">
         <h2>Audience &amp; Positioning</h2>
         <div class="aud-grid">
           <div class="aud-box">
@@ -666,6 +856,16 @@
         </div>
       </section>
 
+      <!-- Wish box -->
+      <div class="wish-box" id="wishBox">
+        <h3>🏁 TULIS WISH DI TRACK</h3>
+        <div class="wish-row">
+          <input id="wishInput" type="text" maxlength="80" placeholder="Tulis harapan buat ulang tahun ini..." />
+          <button class="act yellow" type="button" id="btnAddWish">➕ ADD</button>
+        </div>
+        <div class="wish-list" id="wishList"></div>
+      </div>
+
       <!-- 09 Thank you -->
       <section class="slide slide-thanks" id="thanks">
         <div class="checker-top"></div>
@@ -676,6 +876,11 @@
           <span>🏎️</span>
         </div>
         <button class="btn-gas" id="gasBtn" type="button">GAS POL! 🎁</button>
+        <div class="extra-btns">
+          <button type="button" id="btnReplay">🔁 REPLAY INTRO</button>
+          <button type="button" id="btnFinish">🏆 FINISH LINE</button>
+          <button type="button" id="btnShare">🔗 COPY LINK</button>
+        </div>
         <div class="checker-bot"></div>
       </section>
     </div>
@@ -683,6 +888,10 @@
     <footer>Hot Wheels energy · Surprise deck · Aonagi Works · 2026</footer>
   </div>
 </div>
+
+<div class="nitro-overlay" id="nitro"></div>
+<div class="speedo" id="speedo">SPD <span id="spdVal">0</span> km/h</div>
+<div class="toast" id="toast"></div>
 
 <script>
 (function () {
@@ -693,12 +902,54 @@
 
   let input = "";
   const max = 6;
+  let speed = 0;
+  let musicOn = false;
+  const cars = ["🏎️", "🚗", "🚙", "🚘", "🚕", "🚓", "🚒"];
+  const wishes = [
+    "Full boost di tahun ini! 🔥",
+    "Tire grip kuat, hati lebih kuat. ❤️",
+    "Finish line cuma istirahat — gas lagi! 🏁",
+    "Ka-chow forever, driver. ⚡",
+    "Semoga semua lap jadi victory lap. 🏆",
+    "Pit crew selalu standby buat kamu. 🛠️",
+  ];
+
   document.getElementById("recipientName").textContent = RECIPIENT;
 
   const pwScreen = document.getElementById("pwScreen");
   const main = document.getElementById("main");
   const pwDisplay = document.getElementById("pwDisplay");
   const pwError = document.getElementById("pwError");
+  const toastEl = document.getElementById("toast");
+  const spdVal = document.getElementById("spdVal");
+  const nitro = document.getElementById("nitro");
+  const aboutText = document.getElementById("aboutText");
+  const aboutOriginal = aboutText.innerHTML;
+  const aboutSecret =
+    "Pesan rahasia: kamu lebih keren dari mobil apa pun di rak Hot Wheels. Jangan ragu ngegas mimpi kamu — aku cheerleader di tribun. 💛";
+  let aboutFlipped = false;
+
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toastEl.classList.remove("show"), 2200);
+  }
+
+  function setSpeed(v) {
+    speed = Math.max(0, Math.min(320, v));
+    spdVal.textContent = Math.round(speed);
+  }
+
+  function goTo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.querySelectorAll(".race-nav button").forEach((b) => {
+      b.classList.toggle("active", b.getAttribute("data-go") === id);
+    });
+    setSpeed(speed + 15);
+  }
 
   function renderDots() {
     let s = "";
@@ -724,9 +975,14 @@
         pwScreen.classList.add("hidden");
         main.classList.add("show");
         confetti();
+        setSpeed(40);
+        toast("🏁 Engine ON — selamat datang, " + RECIPIENT + "!");
       } else {
         pwError.textContent = "❌ PIN salah — coba lagi, driver!";
-        setTimeout(() => { input = ""; renderDots(); }, 650);
+        setTimeout(() => {
+          input = "";
+          renderDots();
+        }, 650);
       }
     }
   });
@@ -735,7 +991,7 @@
     const box = document.getElementById("confetti");
     const colors = ["#E10600", "#FFD100", "#FF6A00", "#000", "#fff", "#2D6BFF", "#FFD100"];
     box.innerHTML = "";
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 90; i++) {
       const el = document.createElement("div");
       el.className = "piece";
       el.style.left = Math.random() * 100 + "%";
@@ -747,21 +1003,242 @@
       el.style.animationDelay = Math.random() * 1.2 + "s";
       box.appendChild(el);
     }
-    setTimeout(() => { box.innerHTML = ""; }, 5000);
+    setTimeout(() => {
+      box.innerHTML = "";
+    }, 5000);
   }
 
-  document.getElementById("gasBtn").addEventListener("click", () => {
-    confetti();
-    document.getElementById("home").scrollIntoView({ behavior: "smooth" });
+  // Nav
+  document.getElementById("raceNav").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-go]");
+    if (!b) return;
+    goTo(b.getAttribute("data-go"));
+    toast("➡️ Menuju " + b.textContent.trim());
+  });
+  document.getElementById("contentsList").addEventListener("click", (e) => {
+    const li = e.target.closest("li[data-go]");
+    if (!li) return;
+    goTo(li.getAttribute("data-go"));
   });
 
-  let musicOn = false;
+  // Action bar
+  document.getElementById("btnNitro").addEventListener("click", () => {
+    nitro.classList.remove("on");
+    void nitro.offsetWidth;
+    nitro.classList.add("on");
+    setSpeed(speed + 80);
+    confetti();
+    toast("🔥 NITRO! +" + Math.min(80, 320 - (speed - 80)) + " km/h");
+    setTimeout(() => nitro.classList.remove("on"), 900);
+  });
+
+  document.getElementById("btnHorn").addEventListener("click", () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "square";
+      o.frequency.value = 420;
+      g.gain.value = 0.04;
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start();
+      setTimeout(() => {
+        o.frequency.value = 280;
+      }, 80);
+      setTimeout(() => {
+        o.stop();
+        ctx.close();
+      }, 220);
+    } catch (err) {}
+    toast("📢 BEEP BEEP!");
+    setSpeed(speed + 5);
+  });
+
+  document.getElementById("btnBoost").addEventListener("click", () => {
+    setSpeed(speed + 35);
+    toast("⚡ BOOST! Speed " + Math.round(speed) + " km/h");
+  });
+
+  document.getElementById("btnShuffle").addEventListener("click", () => {
+    const c = cars[Math.floor(Math.random() * cars.length)];
+    const hero = document.getElementById("heroCar");
+    const dcar = document.getElementById("detailsCar");
+    const ccar = document.getElementById("contentsCar");
+    if (hero) hero.textContent = c;
+    if (dcar) dcar.textContent = c;
+    if (ccar) ccar.textContent = c + "💨";
+    toast("🎲 Mobil diganti: " + c);
+  });
+
+  document.getElementById("btnConfetti").addEventListener("click", () => {
+    confetti();
+    toast("🎉 Party mode!");
+  });
+
+  document.getElementById("btnStartRace").addEventListener("click", () => {
+    goTo("contents");
+    setSpeed(90);
+    confetti();
+    toast("🏁 Race dimulai!");
+  });
+
+  // Flip about
+  document.getElementById("btnFlipAbout").addEventListener("click", function () {
+    aboutFlipped = !aboutFlipped;
+    aboutText.textContent = aboutFlipped ? aboutSecret : "";
+    if (!aboutFlipped) aboutText.innerHTML = aboutOriginal;
+    this.textContent = aboutFlipped ? "↩️ Balik ke pesan biasa" : "🔄 Flip pesan rahasia";
+    toast(aboutFlipped ? "💌 Pesan rahasia terbuka" : "📄 Pesan biasa");
+  });
+
+  // Typewriter message
+  document.getElementById("btnTypeMsg").addEventListener("click", () => {
+    const box = document.getElementById("mainMessage");
+    const full =
+      "Ka-chow! 🏁 Satu hari buat merayakan umurmu, sejuta alasan buat bersyukur karena kenal kamu. Gas pol terus ke depan — tire grip kuat, engine nyala, dan aku di pit crew kamu. 🔥";
+    box.textContent = "";
+    let i = 0;
+    clearInterval(box._tw);
+    box._tw = setInterval(() => {
+      box.textContent = full.slice(0, ++i);
+      if (i >= full.length) clearInterval(box._tw);
+    }, 18);
+    toast("✍️ Replay pesan…");
+  });
+
+  // Memory cards
+  document.getElementById("memoryCards").addEventListener("click", (e) => {
+    const card = e.target.closest(".prod");
+    if (!card) return;
+    document.querySelectorAll(".prod").forEach((p) => p.classList.remove("picked"));
+    card.classList.add("picked");
+    toast("❤️ Favorit: " + card.getAttribute("data-mem"));
+    setSpeed(speed + 10);
+  });
+
+  // Random wish
+  document.getElementById("btnRandomWish").addEventListener("click", () => {
+    const w = wishes[Math.floor(Math.random() * wishes.length)];
+    document.getElementById("detailsText").textContent = w;
+    confetti();
+    toast("🎲 " + w);
+  });
+
+  // Spin wheel
+  const wheel = document.getElementById("spinWheel");
+  function spin() {
+    wheel.classList.remove("spinning");
+    void wheel.offsetWidth;
+    wheel.classList.add("spinning");
+    const prize = wishes[Math.floor(Math.random() * wishes.length)];
+    setTimeout(() => toast("🎡 Kamu dapat: " + prize), 600);
+    setSpeed(speed + 25);
+  }
+  wheel.addEventListener("click", spin);
+  wheel.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      spin();
+    }
+  });
+
+  // Wish list
+  const wishList = document.getElementById("wishList");
+  const wishInput = document.getElementById("wishInput");
+  function renderWishes() {
+    let arr = [];
+    try {
+      arr = JSON.parse(localStorage.getItem("hw-wishes") || "[]");
+    } catch (e) {
+      arr = [];
+    }
+    wishList.innerHTML = arr
+      .map(
+        (w, i) =>
+          `<div class="wish-item"><span>🏁 ${escapeHtml(w)}</span><button type="button" data-i="${i}">hapus</button></div>`
+      )
+      .join("");
+  }
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+  document.getElementById("btnAddWish").addEventListener("click", () => {
+    const v = wishInput.value.trim();
+    if (!v) {
+      toast("Tulis wish dulu!");
+      return;
+    }
+    let arr = [];
+    try {
+      arr = JSON.parse(localStorage.getItem("hw-wishes") || "[]");
+    } catch (e) {
+      arr = [];
+    }
+    arr.unshift(v);
+    arr = arr.slice(0, 12);
+    localStorage.setItem("hw-wishes", JSON.stringify(arr));
+    wishInput.value = "";
+    renderWishes();
+    toast("✅ Wish ditambahkan!");
+    confetti();
+  });
+  wishList.addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-i]");
+    if (!b) return;
+    let arr = JSON.parse(localStorage.getItem("hw-wishes") || "[]");
+    arr.splice(Number(b.getAttribute("data-i")), 1);
+    localStorage.setItem("hw-wishes", JSON.stringify(arr));
+    renderWishes();
+    toast("Wish dihapus");
+  });
+  wishInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("btnAddWish").click();
+  });
+
+  // Thanks buttons
+  document.getElementById("gasBtn").addEventListener("click", () => {
+    confetti();
+    setSpeed(280);
+    toast("🚀 FULL THROTTLE!");
+    goTo("home");
+  });
+  document.getElementById("btnReplay").addEventListener("click", () => {
+    goTo("home");
+    confetti();
+    toast("🔁 Replay intro");
+  });
+  document.getElementById("btnFinish").addEventListener("click", () => {
+    setSpeed(320);
+    confetti();
+    toast("🏆 FINISH LINE — kamu juara hari ini!");
+  });
+  document.getElementById("btnShare").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      toast("🔗 Link disalin!");
+    } catch (e) {
+      toast(location.href);
+    }
+  });
+
   document.getElementById("musicBtn").addEventListener("click", function () {
     musicOn = !musicOn;
     this.textContent = musicOn ? "🎵 Musik ON" : "🎵 Musik";
+    toast(musicOn ? "🎵 Musik nyala (hubungin file audio nanti)" : "🔇 Musik off");
   });
 
+  // decay speed slowly
+  setInterval(() => {
+    if (speed > 0) setSpeed(speed - 2);
+  }, 800);
+
   renderDots();
+  renderWishes();
 })();
 </script>
 </body>
