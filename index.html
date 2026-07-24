@@ -803,8 +803,10 @@
   });
   $("btnShuffle").addEventListener("click", () => {
     const c = cars[Math.floor(Math.random() * cars.length)];
-    $("menuCar").textContent = c;
-    $("menuSvg").innerHTML = "";
+    const svgHost = $("menuSvg");
+    if (svgHost) {
+      svgHost.innerHTML = `<div style="font-size:4rem;line-height:1">${c}</div>`;
+    }
     toast("🎲 Mobil: " + c);
   });
 
